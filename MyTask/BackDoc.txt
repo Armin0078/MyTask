@@ -1,0 +1,36 @@
+﻿1. Microsoft.EntityFrameworkCore Added from NuGet packages
+	Entity Framework Core is a modern object-database mapper for .NET. 
+	It supports LINQ queries, change tracking, updates, and schema migrations. 
+	EF Core works with SQL Server, Azure SQL Database, SQLite, Azure Cosmos DB, MySQL, PostgreSQL, 
+	and other databases through a provider plugin API.
+
+2.Microsoft.EntityFrameworkCore.Tools Added from NuGet Packages
+	Entity Framework Core Tools for the NuGet Package Manager Console in Visual Studio.
+	Enables these commonly used commands:
+	Add-Migration
+	Bundle-Migration
+	Drop-Database
+	Get-DbContext
+	Get-Migration
+	Optimize-DbContext
+	Remove-Migration
+	Scaffold-DbContext
+	Script-Migration
+	Update-Database
+
+3.Microsoft.EntityFrameworkCore.Design Added from NuGet Packages
+	Shared design-time components for Entity Framework Core tools.
+
+4.Microsoft.EntityFrameworkCore.Relational Addded from NuGet Packages
+	Shared Entity Framework Core components for relational database providers.
+
+5. Microsoft.EntityFrameworkCore.SqlServer Added from NuGet Packages.
+	Microsoft SQL Server database provider for Entity Framework Core.
+
+6. Swashbuckle.AspNetCore Added from NuGet Packages.
+	Swagger tools for documenting APIs built on ASP.NET Core
+
+7. Microsoft.VisualStudio.Web.CodeGeneration.Design Added from NuGet Packages.
+	Code Generation tool for ASP.NET Core. 
+	Contains the dotnet-aspnet-codegenerator command 
+	used for generating controllers and views.
