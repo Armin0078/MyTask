@@ -34,3 +34,9 @@
 	Code Generation tool for ASP.NET Core. 
 	Contains the dotnet-aspnet-codegenerator command 
 	used for generating controllers and views.
+
+8. Microsoft.AspNetCore.Identity.EntityFrameworkCore Added from NuGet Packages.
+	ASP.NET Core Identity provider that uses Entity Framework Core.
+
+9. Microsoft.AspNetCore.Authentication.JwtBearer
+	ASP.NET Core middleware that enables an application to receive an OpenID Connect bearer token.
