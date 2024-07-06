@@ -18,9 +18,9 @@ namespace MyTask.Data
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
-			modelBuilder.Entity<Product>().HasKey(
-				d => new { d.ManufactureEmail, d.ProduceDate }
-				);
+			modelBuilder.Entity<Product>()
+			.HasIndex(p => new { p.ManufactureEmail, p.ProduceDate })
+			.IsUnique();
 
 
 			base.OnModelCreating(modelBuilder);
