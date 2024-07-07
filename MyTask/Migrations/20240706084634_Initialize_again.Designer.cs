@@ -12,8 +12,8 @@ using MyTask.Data;
 namespace MyTask.Migrations
 {
     [DbContext(typeof(TaskDBContext))]
-    [Migration("20240703181347_Adding_Tables")]
-    partial class Adding_Tables
+    [Migration("20240706084634_Initialize_again")]
+    partial class Initialize_again
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,15 +27,22 @@ namespace MyTask.Migrations
 
             modelBuilder.Entity("MyTask.Models.Product", b =>
                 {
-                    b.Property<string>("ManufactureEmail")
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.Property<DateTime>("ProduceDate")
-                        .HasColumnType("datetime2");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CreatedByUserId")
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsAvailable")
                         .HasColumnType("bit");
+
+                    b.Property<string>("ManufactureEmail")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<string>("ManufacturePhone")
                         .IsRequired()
@@ -47,7 +54,13 @@ namespace MyTask.Migrations
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
-                    b.HasKey("ManufactureEmail", "ProduceDate");
+                    b.Property<DateTime>("ProduceDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ManufactureEmail", "ProduceDate")
+                        .IsUnique();
 
                     b.ToTable("Product");
                 });

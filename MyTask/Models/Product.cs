@@ -1,18 +1,20 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MyTask.Models
 {
 	public class Product
 	{
+		[Key]
         public int Id { get; set; }
 
-        [Required, MaxLength(25), MinLength(3)]
+        [Required, MaxLength(25), MinLength(2)]
         public string? Name { get; set; }
 
 		[Required]
 		public DateTime ProduceDate { get; set; }
 
-		[Required, MaxLength(11), Phone]
+		[Required, MaxLength(12), Phone]
 		public string? ManufacturePhone { get; set; }
 
 		[Required, EmailAddress, MaxLength(30)]
@@ -23,8 +25,7 @@ namespace MyTask.Models
 
 
 		// relation with user model
-		[Required]
+		[AllowNull]
 		public int CreatedByUserId { get; set; }
-		public User CreatedByUser { get; set; }
 	}
 }

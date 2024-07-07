@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MyTask.Models
 {
-	public class User : IdentityUser
+	public class User
 	{
 		[Key]
 		public int Id { get; set; }
