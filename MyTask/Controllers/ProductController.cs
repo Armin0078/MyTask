@@ -83,6 +83,39 @@ namespace MyTask.Controllers
 				throw;
 			}
 		}
-		
+
+
+		[HttpDelete]
+		[Authorize]
+		[Route("DeleteProductByAuthorizedUser")]
+
+		public ActionResult DeleteProductByAuthorizedUser(int productId)
+		{
+			try
+			{
+				var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+				if (userId == 0 || userId == null)
+				{
+					return BadRequest("No Authorized User");
+				}
+				var product = _context.Product.SingleOrDefault(u => u.Id == productId);
+				if (product == null)
+				{
+					return BadRequest("This item does not exist");
+				}
+				if (product.CreatedByUserId != userId)
+				{
+					return BadRequest("This item is not for this user");
+				}
+				_context.Product.Remove(product);
+				_context.SaveChanges();
+				return Ok("Item Deleted");
+			}
+			catch (Exception)
+			{
+
+				throw;
+			}
+		}
 	}
 }
