@@ -22,6 +22,7 @@ namespace MyTask.Controllers
 
 		[HttpPost]
 		[Authorize]
+		[Route("CreateNewProduct")]
 		public ActionResult CreateNewProduct([FromBody] Product product) 
 		{
 			try
@@ -29,7 +30,7 @@ namespace MyTask.Controllers
 				product.CreatedByUserId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 				if(product.CreatedByUserId == 0 || product.CreatedByUserId == null)
 				{
-					return BadRequest("No User Authorized yet");
+					return BadRequest("No User has been Authorized yet");
 				}
 				_context.Product.Add(product);
 				_context.SaveChanges();
@@ -37,6 +38,48 @@ namespace MyTask.Controllers
 			}
 			catch (Exception)
 			{
+				throw;
+			}
+		}
+
+		[HttpGet]
+		[Authorize]
+		[Route("GetProductByAuthorizedUser")]
+		public ActionResult<List<Product>> GetProductByAuthorizedUser()
+		{
+			try
+			{
+				var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+				if (userId == 0 || userId == null)
+				{
+					return BadRequest("No Authorized User");
+				}
+				var products = _context.Product.Where(u => u.CreatedByUserId == userId).ToList();
+				if (products.Count == 0) 
+				{
+					return BadRequest("This user has not any product");
+				}
+				return products;
+
+			}
+			catch (Exception)
+			{
+
+				throw;
+			}
+		}
+
+		[HttpGet]
+		[Route("GetAllProducts")]
+		public ActionResult<List<Product>> GetAllProducts()
+		{
+			try
+			{
+				return _context.Product.ToList();
+			}
+			catch (Exception)
+			{
+
 				throw;
 			}
 		}

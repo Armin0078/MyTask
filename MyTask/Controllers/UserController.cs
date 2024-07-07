@@ -16,6 +16,7 @@ namespace MyTask.Controllers
         }
 
 		[HttpPost]
+		[Route("InsertUser")]
 		public ActionResult InsertUser(User user)
 		{
 			try
@@ -31,6 +32,7 @@ namespace MyTask.Controllers
 		}
 
 		[HttpGet]
+		[Route("GetAllUsers")]
 		public ActionResult<List<User>> GetAllUsers()
 		{
 			try
