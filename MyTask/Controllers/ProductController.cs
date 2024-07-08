@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
 using Microsoft.DotNet.Scaffolding.Shared.Messaging;
+using Microsoft.EntityFrameworkCore;
 using MyTask.Data;
 using MyTask.Models;
 using System.IdentityModel.Tokens.Jwt;
@@ -28,7 +31,7 @@ namespace MyTask.Controllers
 			try
 			{
 				product.CreatedByUserId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-				if(product.CreatedByUserId == 0 || product.CreatedByUserId == null)
+				if(product.CreatedByUserId == 0)
 				{
 					return BadRequest("No User has been Authorized yet");
 				}
@@ -50,7 +53,7 @@ namespace MyTask.Controllers
 			try
 			{
 				var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-				if (userId == 0 || userId == null)
+				if (userId == 0)
 				{
 					return BadRequest("No Authorized User");
 				}
@@ -84,6 +87,41 @@ namespace MyTask.Controllers
 			}
 		}
 
+		[HttpPut]
+		[Route("UpdateProductByAuthorizedUser")]
+		[Authorize]
+		
+		public ActionResult<Product> UpdateProductByAuthorizedUser(int productId,[FromBody] Product product)
+		{
+			try
+			{
+				var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+				if (userId == 0)
+				{
+					return BadRequest("No Authorized User");
+				}
+				var oldProduct = _context.Product.AsNoTracking().SingleOrDefault(u => u.Id == productId);
+				if (oldProduct == null)
+				{
+					return BadRequest("This item does not exist");
+				}
+				if (oldProduct.CreatedByUserId != userId)
+				{
+					return BadRequest("This item is not for this user");
+				}
+				product.CreatedByUserId = userId;
+				product.Id = productId;
+				product.ProduceDate = oldProduct.ProduceDate;
+				_context.Product.Update(product);
+				_context.SaveChanges();
+
+				return Ok("item Updated");
+			}
+			catch (Exception)
+			{
+				throw;
+			}
+		}
 
 		[HttpDelete]
 		[Authorize]
@@ -94,7 +132,7 @@ namespace MyTask.Controllers
 			try
 			{
 				var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-				if (userId == 0 || userId == null)
+				if (userId == 0)
 				{
 					return BadRequest("No Authorized User");
 				}
