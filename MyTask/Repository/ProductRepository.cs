@@ -7,10 +7,10 @@ namespace MyTask.Repository
 	public class ProductRepository
 	{
 		private readonly TaskDBContext _context;
-        public ProductRepository(TaskDBContext context)
-        {
-            _context = context;
-        }
+		public ProductRepository(TaskDBContext context)
+		{
+			_context = context;
+		}
 		// User
 		public User GetUserByName(string UserName)
 		{
@@ -37,7 +37,7 @@ namespace MyTask.Repository
 			}
 		}
 		//
-        public List<Product> GetProductsByUserId(int userId)
+		public List<Product> GetProductsByUserId(int userId)
 		{
 			try
 			{
@@ -61,7 +61,7 @@ namespace MyTask.Repository
 			}
 		}
 
-		public Product GetProductByProductId(int productId) 
+		public Product GetProductByProductId(int productId)
 		{
 			try
 			{
@@ -98,7 +98,7 @@ namespace MyTask.Repository
 			}
 		}
 
-		public void Delete<T>(T product) 
+		public void Delete<T>(T product)
 		{
 			try
 			{

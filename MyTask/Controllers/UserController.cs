@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MyTask.Data;
 using MyTask.Models;
 using MyTask.Repository;
 
@@ -12,10 +11,10 @@ namespace MyTask.Controllers
 		//private readonly TaskDBContext _context;
 		static private ProductRepository? _productRepository;
 		public UserController(ProductRepository productRepository)
-        {
-            //_context = context;
+		{
+			//_context = context;
 			_productRepository = productRepository;
-        }
+		}
 
 		[HttpPost]
 		[Route("InsertUser")]
@@ -48,5 +47,5 @@ namespace MyTask.Controllers
 				throw;
 			}
 		}
-    }
+	}
 }

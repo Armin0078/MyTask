@@ -1,14 +1,7 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis;
-using Microsoft.DotNet.Scaffolding.Shared.Messaging;
-using Microsoft.EntityFrameworkCore;
-using MyTask.Data;
 using MyTask.Models;
 using MyTask.Repository;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 namespace MyTask.Controllers
@@ -29,12 +22,12 @@ namespace MyTask.Controllers
 		[HttpPost]
 		[Authorize]
 		[Route("CreateNewProduct")]
-		public ActionResult CreateNewProduct([FromBody] Product product) 
+		public ActionResult CreateNewProduct([FromBody] Product product)
 		{
 			try
 			{
 				product.CreatedByUserId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-				if(product.CreatedByUserId == 0)
+				if (product.CreatedByUserId == 0)
 				{
 					return BadRequest("No User has been Authorized yet");
 				}
@@ -64,7 +57,7 @@ namespace MyTask.Controllers
 				}
 				//var products = _context.Product.Where(u => u.CreatedByUserId == userId).ToList();
 				var products = _productRepository.GetProductsByUserId(userId);
-				if (products.Count == 0) 
+				if (products.Count == 0)
 				{
 					return BadRequest("This user has not any product");
 				}
@@ -122,8 +115,8 @@ namespace MyTask.Controllers
 		[HttpPut]
 		[Route("UpdateProductByAuthorizedUser")]
 		[Authorize]
-		
-		public ActionResult<Product> UpdateProductByAuthorizedUser(int productId,[FromBody] Product product)
+
+		public ActionResult<Product> UpdateProductByAuthorizedUser(int productId, [FromBody] Product product)
 		{
 			try
 			{
@@ -133,7 +126,7 @@ namespace MyTask.Controllers
 					return BadRequest("No Authorized User");
 				}
 				//var oldProduct = _context.Product.AsNoTracking().SingleOrDefault(u => u.Id == productId);
-				var oldProduct = _productRepository.GetProductByProductId(productId);	
+				var oldProduct = _productRepository.GetProductByProductId(productId);
 				if (oldProduct == null)
 				{
 					return BadRequest("This item does not exist");
