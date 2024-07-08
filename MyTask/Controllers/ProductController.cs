@@ -7,6 +7,7 @@ using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.EntityFrameworkCore;
 using MyTask.Data;
 using MyTask.Models;
+using MyTask.Repository;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
@@ -16,11 +17,13 @@ namespace MyTask.Controllers
 	[Route("api/[controller]")]
 	public class ProductController : ControllerBase
 	{
-		private readonly TaskDBContext _context;
+		//private readonly TaskDBContext _context;
+		static private ProductRepository? _productRepository;
 
-		public ProductController(TaskDBContext context)
+		public ProductController(ProductRepository productRepository)
 		{
-			_context = context;
+			//_context = context;
+			_productRepository = productRepository;
 		}
 
 		[HttpPost]
@@ -35,8 +38,10 @@ namespace MyTask.Controllers
 				{
 					return BadRequest("No User has been Authorized yet");
 				}
-				_context.Product.Add(product);
-				_context.SaveChanges();
+				//_context.Product.Add(product);
+				//_context.SaveChanges();
+				_productRepository.Add<Product>(product);
+				_productRepository.SaveDBChanges();
 				return Ok("Congrats, We have new product");
 			}
 			catch (Exception)
@@ -57,7 +62,8 @@ namespace MyTask.Controllers
 				{
 					return BadRequest("No Authorized User");
 				}
-				var products = _context.Product.Where(u => u.CreatedByUserId == userId).ToList();
+				//var products = _context.Product.Where(u => u.CreatedByUserId == userId).ToList();
+				var products = _productRepository.GetProductsByUserId(userId);
 				if (products.Count == 0) 
 				{
 					return BadRequest("This user has not any product");
@@ -67,7 +73,6 @@ namespace MyTask.Controllers
 			}
 			catch (Exception)
 			{
-
 				throw;
 			}
 		}
@@ -78,7 +83,8 @@ namespace MyTask.Controllers
 		{
 			try
 			{
-				return _context.Product.ToList();
+				//return _context.Product.ToList();
+				return _productRepository.GetAllProducts();
 			}
 			catch (Exception)
 			{
@@ -93,12 +99,14 @@ namespace MyTask.Controllers
 		{
 			try
 			{
-				var maker = _context.User.SingleOrDefault(q => q.UserName == makerName);
+				//var maker = _context.User.SingleOrDefault(q => q.UserName == makerName);
+				var maker = _productRepository.GetUserByName(makerName);
 				if (maker == null)
 				{
 					return BadRequest("This user is not exist");
 				}
-				var products = _context.Product.Where(u => u.CreatedByUserId == maker.Id).ToList();
+				//var products = _context.Product.Where(u => u.CreatedByUserId == maker.Id).ToList();
+				var products = _productRepository.GetProductsByUserId(maker.Id);
 				if (products.Count == 0 || products == null)
 				{
 					return BadRequest("This user has not any products");
@@ -124,7 +132,8 @@ namespace MyTask.Controllers
 				{
 					return BadRequest("No Authorized User");
 				}
-				var oldProduct = _context.Product.AsNoTracking().SingleOrDefault(u => u.Id == productId);
+				//var oldProduct = _context.Product.AsNoTracking().SingleOrDefault(u => u.Id == productId);
+				var oldProduct = _productRepository.GetProductByProductId(productId);	
 				if (oldProduct == null)
 				{
 					return BadRequest("This item does not exist");
@@ -136,8 +145,10 @@ namespace MyTask.Controllers
 				product.CreatedByUserId = userId;
 				product.Id = productId;
 				product.ProduceDate = oldProduct.ProduceDate;
-				_context.Product.Update(product);
-				_context.SaveChanges();
+				//_context.Product.Update(product);
+				//_context.SaveChanges();
+				_productRepository.Update<Product>(product);
+				_productRepository.SaveDBChanges();
 
 				return Ok("item Updated");
 			}
@@ -160,7 +171,8 @@ namespace MyTask.Controllers
 				{
 					return BadRequest("No Authorized User");
 				}
-				var product = _context.Product.SingleOrDefault(u => u.Id == productId);
+				//var product = _context.Product.SingleOrDefault(u => u.Id == productId);
+				var product = _productRepository.GetProductByProductId(productId);
 				if (product == null)
 				{
 					return BadRequest("This item does not exist");
@@ -169,13 +181,14 @@ namespace MyTask.Controllers
 				{
 					return BadRequest("This item is not for this user");
 				}
-				_context.Product.Remove(product);
-				_context.SaveChanges();
+				//_context.Product.Remove(product);
+				_productRepository.Delete<Product>(product);
+				//_context.SaveChanges();
+				_productRepository.SaveDBChanges();
 				return Ok("Item Deleted");
 			}
 			catch (Exception)
 			{
-
 				throw;
 			}
 		}

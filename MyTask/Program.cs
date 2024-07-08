@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MyTask.Data;
+using MyTask.Repository;
 using System.Configuration;
 using System.Text;
 
@@ -66,6 +67,7 @@ builder.Services.AddSwaggerGen(c =>
 			}
 		});
 });
+builder.Services.AddScoped<ProductRepository>();
 
 var app = builder.Build();
 
