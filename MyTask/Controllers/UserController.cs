@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyTask.Data;
 using MyTask.Models;
+using MyTask.Repository;
 
 namespace MyTask.Controllers
 {
@@ -8,11 +9,12 @@ namespace MyTask.Controllers
 	[Route("api/[controller]")]
 	public class UserController : ControllerBase
 	{
-		private readonly TaskDBContext _context;
-
-        public UserController(TaskDBContext context)
+		//private readonly TaskDBContext _context;
+		static private ProductRepository? _productRepository;
+		public UserController(ProductRepository productRepository)
         {
-            _context = context;
+            //_context = context;
+			_productRepository = productRepository;
         }
 
 		[HttpPost]
@@ -21,8 +23,10 @@ namespace MyTask.Controllers
 		{
 			try
 			{
-				_context.User.Add(user);
-				_context.SaveChanges();
+				//_context.User.Add(user);
+				//_context.SaveChanges();
+				_productRepository.Add<User>(user);
+				_productRepository.SaveDBChanges();
 				return Ok("Completed");
 			}
 			catch (Exception)
@@ -37,7 +41,7 @@ namespace MyTask.Controllers
 		{
 			try
 			{
-				return _context.User.ToList();
+				return _productRepository.GetAllUser();
 			}
 			catch (Exception)
 			{

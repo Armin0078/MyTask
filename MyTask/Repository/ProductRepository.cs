@@ -24,6 +24,18 @@ namespace MyTask.Repository
 				throw;
 			}
 		}
+
+		public List<User> GetAllUser()
+		{
+			try
+			{
+				return _context.User.ToList();
+			}
+			catch (Exception)
+			{
+				throw;
+			}
+		}
 		//
         public List<Product> GetProductsByUserId(int userId)
 		{
