@@ -87,6 +87,30 @@ namespace MyTask.Controllers
 			}
 		}
 
+		[HttpGet]
+		[Route("FilterProductByMakerName")]
+		public ActionResult<List<Product>> FilterProductByMakerName(string makerName)
+		{
+			try
+			{
+				var maker = _context.User.SingleOrDefault(q => q.UserName == makerName);
+				if (maker == null)
+				{
+					return BadRequest("This user is not exist");
+				}
+				var products = _context.Product.Where(u => u.CreatedByUserId == maker.Id).ToList();
+				if (products.Count == 0 || products == null)
+				{
+					return BadRequest("This user has not any products");
+				}
+				return products;
+			}
+			catch (Exception)
+			{
+				throw;
+			}
+		}
+
 		[HttpPut]
 		[Route("UpdateProductByAuthorizedUser")]
 		[Authorize]
